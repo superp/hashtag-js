@@ -22,6 +22,7 @@ Hashtag = (function() {
     }
     defaults = {
       wrapper: "ht-wrapper",
+      iframeUrl: "http://www.hashtago.com/widgets/",
       callback: null
     };
     this.options = jQuery.extend(defaults, options);
@@ -36,16 +37,48 @@ Hashtag = (function() {
   };
 
   Hashtag.prototype._events = function() {
-    var self;
-    self = this;
     return this.hashtag.click((function(_this) {
       return function(event) {
-        console.log("click");
+        var container, element, iframe;
+        element = jQuery(event.target);
+        iframe = _this._buildIframe(element);
+        container = _this._buildContainer();
+        container.append(iframe);
+        jQuery('body').append(container);
         if (jQuery.isFunction(_this.options.callback)) {
           return _this.options.callback.apply(_this, [_this]);
         }
       };
     })(this));
+  };
+
+  Hashtag.prototype._buildIframe = function(element) {
+    var frameName, iframe, uid;
+    uid = element.attr("title").replace(/\#/g, "");
+    frameName = "hashtag-frame-" + uid;
+    iframe = jQuery('<iframe frameborder="0" vspace="0" hspace="0" scrolling="auto" width="907" height="500" />');
+    iframe.attr("id", frameName);
+    iframe.attr("name", frameName);
+    iframe.addClass("hashtag-iframe");
+    iframe.attr("src", HashtagParser.buildUrl(this.options.iframeUrl + uid, {
+      key: __ht.api_key
+    }));
+    return iframe;
+  };
+
+  Hashtag.prototype._buildContainer = function() {
+    var close, container;
+    container = jQuery("<div/>");
+    container.attr("id", "hashtag-container");
+    container.css("position", "absolute");
+    container.css("top", "50%");
+    container.css("left", "50%");
+    container.css("margin", "-250px 0 0 -453px");
+    close = jQuery("<a href='javascript:void(0)' onclick='jQuery(\"#hashtag-container\").remove()'>X</a>");
+    close.css("position", "absolute");
+    close.css("top", "10%");
+    close.css("right", "30%");
+    return container.append(close);
   };
 
   return Hashtag;
@@ -62,7 +95,8 @@ HashtagParser = (function() {
     defaults = {
       wrapper: "body",
       regex: /\[(\#\w+)\]/ig,
-      hashtagClass: "ht-init"
+      hashtagClass: "ht-init",
+      collectionUrl: "http://www.hashtago.com/widgets"
     };
     this.options = jQuery.extend(defaults, options);
     this._setup();
@@ -72,7 +106,22 @@ HashtagParser = (function() {
     this.parent = jQuery(this.options.wrapper);
     this._tagReplace(this.parent.get(0));
     this._defaultQuery();
-    return jQuery(this.options.hashtagClass).hashtag();
+    return jQuery("." + this.options.hashtagClass).hashtag();
+  };
+
+  HashtagParser.prototype._defaultQuery = function() {
+    var imgNode, values;
+    values = jQuery("." + this.options.hashtagClass).map(function() {
+      return this.title;
+    }).get().join(",").replace(/\#/g, "");
+    imgNode = document.createElement("img");
+    imgNode.src = HashtagParser.buildUrl(this.options.collectionUrl, {
+      tags: values,
+      key: this.api_key
+    });
+    imgNode.style.position = "absolute";
+    imgNode.style.left = "-9999px";
+    return jQuery('body').append(imgNode);
   };
 
   HashtagParser.prototype._tagReplace = function(node) {
@@ -109,8 +158,18 @@ HashtagParser = (function() {
     return skip;
   };
 
-  HashtagParser.prototype._defaultQuery = function() {
-    return console.log("HashtagParser _default_query");
+  HashtagParser.buildUrl = function(url, parameters) {
+    var key, qs, value;
+    qs = "";
+    for (key in parameters) {
+      value = parameters[key];
+      qs += encodeURIComponent(key) + "=" + encodeURIComponent(value) + "&";
+    }
+    if (qs.length > 0) {
+      qs = qs.substring(0, qs.length - 1);
+      url = url + "?" + qs;
+    }
+    return url;
   };
 
   return HashtagParser;
@@ -120,6 +179,8 @@ HashtagParser = (function() {
 window.Hashtag = Hashtag;
 
 window.HashtagParser = HashtagParser;
+
+jQuery.noConflict();
 
 jQuery(document).ready(function() {
   return __ht.parser = new HashtagParser(__ht.api_key);
