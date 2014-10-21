@@ -54,24 +54,62 @@ Hashtag = (function() {
 
 HashtagParser = (function() {
   function HashtagParser(api_key, options) {
+    var defaults;
     this.api_key = api_key;
     if (options == null) {
       options = {};
     }
+    defaults = {
+      wrapper: "body",
+      regex: /\[(\#\w+)\]/ig,
+      hashtagClass: "ht-init"
+    };
+    this.options = jQuery.extend(defaults, options);
     this._setup();
-    this._default_query();
   }
 
   HashtagParser.prototype._setup = function() {
-    console.log("HashtagParser _setup");
-    return jQuery("p").each(function(index, item) {
-      var _html;
-      _html = jQuery(item).html().replace(/(\#\w+)/ig, "<a href=\"javascript:void(0)\" class=\"ht-init\">$1<\/a>");
-      return jQuery(item).html(_html);
-    });
+    this.parent = jQuery(this.options.wrapper);
+    this._tagReplace(this.parent.get(0));
+    this._defaultQuery();
+    return jQuery(this.options.hashtagClass).hashtag();
   };
 
-  HashtagParser.prototype._default_query = function() {
+  HashtagParser.prototype._tagReplace = function(node) {
+    var i, skip;
+    skip = 0;
+    if (node.nodeType === 3) {
+      if (this.options.regex.test(node.data)) {
+        node.data.replace(this.options.regex, (function(_this) {
+          return function(all) {
+            var anode, args, hashtag, newTextNode, offset;
+            args = [].slice.call(arguments);
+            offset = args[args.length - 2];
+            hashtag = args[args.length - 3];
+            newTextNode = node.splitText(offset);
+            newTextNode.data = newTextNode.data.substr(all.length);
+            anode = document.createElement("a");
+            anode.title = hashtag;
+            anode.textContent = hashtag;
+            anode.className = _this.options.hashtagClass;
+            anode.href = "javascript:void(0);";
+            node.parentNode.insertBefore(anode, node.nextSibling);
+            return node = newTextNode;
+          };
+        })(this));
+        skip = 1;
+      }
+    } else if (node.nodeType === 1 && node.childNodes && !/(script|style|iframe|canvas)/i.test(node.tagName) && node.tagName !== "A") {
+      i = 0;
+      while (i < node.childNodes.length) {
+        i += this._tagReplace(node.childNodes[i]);
+        ++i;
+      }
+    }
+    return skip;
+  };
+
+  HashtagParser.prototype._defaultQuery = function() {
     return console.log("HashtagParser _default_query");
   };
 

@@ -37,18 +37,57 @@ class Hashtag
 
 class HashtagParser
   constructor: (@api_key, options = {}) ->
+    defaults =
+      wrapper: "body"
+      regex: /\[(\#\w+)\]/ig
+      hashtagClass: "ht-init"
+      
+    @options = jQuery.extend defaults, options
+
     this._setup()
-    this._default_query()
 
   _setup: ->
-    console.log "HashtagParser _setup"
+    @parent = jQuery(@options.wrapper)
 
-    # Only for WordPress
-    jQuery("p").each (index, item) ->
-      _html = jQuery(item).html().replace(/(\#\w+)/ig, "<a href=\"javascript:void(0)\" class=\"ht-init\">$1<\/a>")
-      jQuery(item).html(_html)
+    this._tagReplace(@parent.get(0))
+    this._defaultQuery()
 
-  _default_query: ->
+    jQuery(@options.hashtagClass).hashtag()
+
+  _tagReplace: (node) ->
+    skip = 0
+
+    if node.nodeType is 3
+      if @options.regex.test(node.data)
+        node.data.replace(@options.regex, (all) =>
+          args = [].slice.call(arguments)
+          offset = args[args.length - 2]
+          hashtag = args[args.length - 3]
+          newTextNode = node.splitText(offset)
+
+          newTextNode.data = newTextNode.data.substr(all.length)
+
+          anode = document.createElement("a")
+          anode.title = hashtag
+          anode.textContent = hashtag
+          anode.className = @options.hashtagClass
+          anode.href = "javascript:void(0);"
+
+          node.parentNode.insertBefore anode, node.nextSibling
+          node = newTextNode
+        )
+
+        skip = 1
+    else if node.nodeType is 1 and node.childNodes and not /(script|style|iframe|canvas)/i.test(node.tagName) and node.tagName != "A"
+      i = 0
+
+      while i < node.childNodes.length
+        i += this._tagReplace(node.childNodes[i])
+        ++i
+
+    skip
+
+  _defaultQuery: ->
     console.log "HashtagParser _default_query"
 
     # TODO send query with all hashtags
