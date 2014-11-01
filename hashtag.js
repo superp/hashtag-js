@@ -58,7 +58,7 @@ Hashtag = (function() {
     return jQuery(window).resize((function(_this) {
       return function() {
         var container;
-        container = $("#hashtag-container");
+        container = jQuery("#hashtag-container");
         if (container.length > 0) {
           return container.css("height", _this._contentHeight() + "px");
         }

@@ -45,7 +45,7 @@ class Hashtag
         @options.callback.apply(this, [this])
 
     jQuery(window).resize =>
-      container = $("#hashtag-container")
+      container = jQuery("#hashtag-container")
 
       if container.length > 0
         container.css("height", this._contentHeight() + "px")
