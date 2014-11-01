@@ -32,53 +32,63 @@ Hashtag = (function() {
 
   Hashtag.prototype._setup = function() {
     this.hashtag = jQuery(this.dom_element);
+    this.uid = this.hashtag.attr("title").replace(/\#/g, "");
     this.hashtag.addClass(this.options.wrapper);
     return this.hashtag.data("hashtag", this);
   };
 
   Hashtag.prototype._events = function() {
-    return this.hashtag.click((function(_this) {
+    this.hashtag.click((function(_this) {
       return function(event) {
-        var container, element, iframe;
+        var container, element, iframe, overlay, skin, wrap;
         element = jQuery(event.target);
         iframe = _this._buildIframe(element);
         container = _this._buildContainer();
         container.append(iframe);
-        jQuery('body').append(container);
+        overlay = jQuery("<div/>").addClass("hashtag-overlay");
+        wrap = jQuery("<div/>").addClass("hashtag-wrap");
+        skin = jQuery("<div/>").addClass("hashtag-skin");
+        overlay.append(wrap.append(skin.append(container)));
+        jQuery('body').append(overlay);
         if (jQuery.isFunction(_this.options.callback)) {
           return _this.options.callback.apply(_this, [_this]);
         }
       };
     })(this));
+    return jQuery(window).resize((function(_this) {
+      return function() {
+        var container;
+        container = $("#hashtag-container");
+        if (container.length > 0) {
+          return container.css("height", _this._contentHeight() + "px");
+        }
+      };
+    })(this));
+  };
+
+  Hashtag.prototype._contentHeight = function() {
+    return jQuery(window).height() - 40;
   };
 
   Hashtag.prototype._buildIframe = function(element) {
-    var frameName, iframe, uid;
-    uid = element.attr("title").replace(/\#/g, "");
-    frameName = "hashtag-frame-" + uid;
-    iframe = jQuery('<iframe frameborder="0" vspace="0" hspace="0" scrolling="auto" width="907" height="500" />');
-    iframe.attr("id", frameName);
-    iframe.attr("name", frameName);
-    iframe.addClass("hashtag-iframe");
-    iframe.attr("src", HashtagParser.buildUrl(this.options.iframeUrl + uid, {
+    var frameName, iframe;
+    frameName = "hashtag-frame-" + this.uid;
+    iframe = jQuery('<iframe frameborder="0" vspace="0" hspace="0" scrolling="auto" />');
+    iframe.attr("id", frameName).attr("name", frameName).addClass("hashtag-iframe");
+    iframe.attr("src", HashtagParser.buildUrl(this.options.iframeUrl + this.uid, {
       key: __ht.api_key
     }));
     return iframe;
   };
 
   Hashtag.prototype._buildContainer = function() {
-    var close, container;
+    var close, container, title;
     container = jQuery("<div/>");
     container.attr("id", "hashtag-container");
-    container.css("position", "absolute");
-    container.css("top", "50%");
-    container.css("left", "50%");
-    container.css("margin", "-250px 0 0 -453px");
-    close = jQuery("<a href='javascript:void(0)' onclick='jQuery(\"#hashtag-container\").remove()'>X</a>");
-    close.css("position", "absolute");
-    close.css("top", "10%");
-    close.css("right", "30%");
-    return container.append(close);
+    container.css("height", this._contentHeight() + "px");
+    close = jQuery("<a href='javascript:void(0)' onclick='jQuery(\".hashtag-overlay\").remove()'></a>").addClass("hashtag-close");
+    title = jQuery("<div/>").addClass("hashtag-title").text(this.hashtag.attr("title"));
+    return container.append(close).append(title);
   };
 
   return Hashtag;

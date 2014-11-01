@@ -20,6 +20,7 @@ class Hashtag
 
   _setup: ->
     @hashtag = jQuery(@dom_element)
+    @uid = @hashtag.attr("title").replace(/\#/g, "")
 
     @hashtag.addClass(@options.wrapper)
     @hashtag.data "hashtag", this
@@ -32,20 +33,32 @@ class Hashtag
       container = this._buildContainer()
       container.append(iframe)
 
-      jQuery('body').append(container)
+      overlay = jQuery("<div/>").addClass("hashtag-overlay")
+      wrap = jQuery("<div/>").addClass("hashtag-wrap")
+      skin = jQuery("<div/>").addClass("hashtag-skin")
+
+      overlay.append(wrap.append(skin.append(container)))
+
+      jQuery('body').append(overlay)
 
       if jQuery.isFunction(@options.callback)
         @options.callback.apply(this, [this])
 
-  _buildIframe: (element) ->
-    uid = element.attr("title").replace(/\#/g, "")
-    frameName = "hashtag-frame-" + uid
+    jQuery(window).resize =>
+      container = $("#hashtag-container")
 
-    iframe = jQuery('<iframe frameborder="0" vspace="0" hspace="0" scrolling="auto" width="907" height="500" />')
-    iframe.attr("id", frameName)
-    iframe.attr("name", frameName)
-    iframe.addClass("hashtag-iframe")
-    iframe.attr "src", HashtagParser.buildUrl(@options.iframeUrl + uid,
+      if container.length > 0
+        container.css("height", this._contentHeight() + "px")
+
+  _contentHeight: ->
+    jQuery(window).height() - 40
+
+  _buildIframe: (element) ->
+    frameName = "hashtag-frame-" + @uid
+
+    iframe = jQuery('<iframe frameborder="0" vspace="0" hspace="0" scrolling="auto" />')
+    iframe.attr("id", frameName).attr("name", frameName).addClass("hashtag-iframe")
+    iframe.attr "src", HashtagParser.buildUrl(@options.iframeUrl + @uid,
       key: __ht.api_key
     )
 
@@ -54,17 +67,13 @@ class Hashtag
   _buildContainer: () ->
     container = jQuery("<div/>")
     container.attr("id", "hashtag-container")
-    container.css("position", "absolute")
-    container.css("top", "50%")
-    container.css("left", "50%")
-    container.css("margin", "-250px 0 0 -453px")
+    container.css("height", this._contentHeight() + "px")
 
-    close = jQuery("<a href='javascript:void(0)' onclick='jQuery(\"#hashtag-container\").remove()'>X</a>")
-    close.css("position", "absolute")
-    close.css("top", "10%")
-    close.css("right", "30%")
 
-    container.append(close)
+    close = jQuery("<a href='javascript:void(0)' onclick='jQuery(\".hashtag-overlay\").remove()'></a>").addClass("hashtag-close")
+    title = jQuery("<div/>").addClass("hashtag-title").text(@hashtag.attr("title"))
+
+    container.append(close).append(title)
 
 class HashtagParser
   constructor: (@api_key, options = {}) ->
