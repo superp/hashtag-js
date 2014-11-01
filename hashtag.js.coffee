@@ -82,6 +82,7 @@ class HashtagParser
       regex: /\[(\#\w+)\]/ig
       hashtagClass: "ht-init"
       collectionUrl: "http://www.hashtago.com/widgets"
+      cssUrl: "css/hashtag.css"
       
     @options = jQuery.extend defaults, options
 
@@ -92,6 +93,7 @@ class HashtagParser
 
     this._tagReplace(@parent.get(0))
     this._defaultQuery()
+    this._loadStyles()
 
     jQuery("." + @options.hashtagClass).hashtag()
 
@@ -141,6 +143,19 @@ class HashtagParser
         ++i
 
     skip
+
+  _loadStyles: ->
+    if !document.getElementById("hashtag-css")
+      head  = document.getElementsByTagName('head')[0]
+      link  = document.createElement('link')
+
+      link.id   = "hashtag-css"
+      link.rel  = 'stylesheet'
+      link.type = 'text/css'
+      link.href = @options.cssUrl
+      link.media = 'all'
+
+      head.appendChild(link)
 
   @buildUrl: (url, parameters) ->
     qs = ""

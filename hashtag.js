@@ -106,7 +106,8 @@ HashtagParser = (function() {
       wrapper: "body",
       regex: /\[(\#\w+)\]/ig,
       hashtagClass: "ht-init",
-      collectionUrl: "http://www.hashtago.com/widgets"
+      collectionUrl: "http://www.hashtago.com/widgets",
+      cssUrl: "css/hashtag.css"
     };
     this.options = jQuery.extend(defaults, options);
     this._setup();
@@ -116,6 +117,7 @@ HashtagParser = (function() {
     this.parent = jQuery(this.options.wrapper);
     this._tagReplace(this.parent.get(0));
     this._defaultQuery();
+    this._loadStyles();
     return jQuery("." + this.options.hashtagClass).hashtag();
   };
 
@@ -166,6 +168,20 @@ HashtagParser = (function() {
       }
     }
     return skip;
+  };
+
+  HashtagParser.prototype._loadStyles = function() {
+    var head, link;
+    if (!document.getElementById("hashtag-css")) {
+      head = document.getElementsByTagName('head')[0];
+      link = document.createElement('link');
+      link.id = "hashtag-css";
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = this.options.cssUrl;
+      link.media = 'all';
+      return head.appendChild(link);
+    }
   };
 
   HashtagParser.buildUrl = function(url, parameters) {
