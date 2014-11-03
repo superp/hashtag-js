@@ -1,8 +1,18 @@
 = Hashtag js finder
 
-== Usage
+== Setup
+  
+  1) Copy hashtag.js, hashtag.css and images to your own server 
 
-    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+  2) Change in hashtag.js this line:
+
+    script.src = "http://code.jquery.com/jquery-1.10.2.js";
+
+  to
+
+    script.src = "//code.jquery.com/jquery-1.10.2.js";
+
+== Usage
 
     <script type="text/javascript">
       var __ht = {};
@@ -10,7 +20,7 @@
 
       (function() {
         var lc = document.createElement('script'); lc.type = 'text/javascript'; lc.async = true;
-        lc.src = 'hashtag.js';
+        lc.src = 'hashtag.js'; // Change to you own server path
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(lc, s);
       })();
     </script>
