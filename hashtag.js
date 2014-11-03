@@ -1,17 +1,14 @@
-var Hashtag, HashtagParser;
+var Hashtag, HashtagParser, nojQuery, script;
 
-jQuery.fn.extend({
-  hashtag: function(options) {
-    return jQuery(this).each(function(input_field) {
-      var hashtag;
-      hashtag = jQuery(this).data("hashtag");
-      if (hashtag == null) {
-        hashtag = new Hashtag(this, options);
-      }
-      return hashtag;
-    });
-  }
-});
+nojQuery = false;
+
+if (!window.jQuery) {
+  script = document.createElement('script');
+  script.type = "text/javascript";
+  script.src = "http://code.jquery.com/jquery-1.10.2.js";
+  document.getElementsByTagName('head')[0].appendChild(script);
+  nojQuery = true;
+}
 
 Hashtag = (function() {
   function Hashtag(dom_element, options) {
@@ -210,8 +207,21 @@ window.Hashtag = Hashtag;
 
 window.HashtagParser = HashtagParser;
 
-jQuery.noConflict();
-
-jQuery(document).ready(function() {
+window.onload = function() {
+  if (nojQuery) {
+    jQuery.noConflict();
+  }
+  jQuery.fn.extend({
+    hashtag: function(options) {
+      return jQuery(this).each(function(input_field) {
+        var hashtag;
+        hashtag = jQuery(this).data("hashtag");
+        if (hashtag == null) {
+          hashtag = new Hashtag(this, options);
+        }
+        return hashtag;
+      });
+    }
+  });
   return __ht.parser = new HashtagParser(__ht.api_key);
-});;
+};

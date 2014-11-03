@@ -1,10 +1,12 @@
-jQuery.fn.extend
-  hashtag: (options) ->
-    jQuery(this).each (input_field) ->
-      hashtag = jQuery(this).data("hashtag")
-      hashtag ?= new Hashtag(this, options)
-      
-      return hashtag
+nojQuery = false
+
+if !window.jQuery
+  script = document.createElement('script')
+  script.type = "text/javascript"
+  script.src = "http://code.jquery.com/jquery-1.10.2.js"
+  document.getElementsByTagName('head')[0].appendChild(script)
+
+  nojQuery = true
 
 class Hashtag
   constructor: (@dom_element, options = {}) ->
@@ -176,6 +178,17 @@ class HashtagParser
 window.Hashtag = Hashtag
 window.HashtagParser = HashtagParser
 
-jQuery.noConflict()
-jQuery(document).ready ->
+# jQuery(document).ready ->
+window.onload = ->
+  if nojQuery
+    jQuery.noConflict()
+
+  jQuery.fn.extend
+    hashtag: (options) ->
+      jQuery(this).each (input_field) ->
+        hashtag = jQuery(this).data("hashtag")
+        hashtag ?= new Hashtag(this, options)
+        
+        return hashtag
+
   __ht.parser = new HashtagParser(__ht.api_key)
