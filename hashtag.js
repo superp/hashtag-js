@@ -33,6 +33,7 @@ Hashtag = (function() {
   Hashtag.prototype._setup = function() {
     this.hashtag = jQuery(this.dom_element);
     this.uid = this.hashtag.attr("title").replace(/\#/g, "");
+    this.frameName = "hashtag-frame-" + this.uid;
     this.hashtag.addClass(this.options.wrapper);
     return this.hashtag.data("hashtag", this);
   };
@@ -40,7 +41,7 @@ Hashtag = (function() {
   Hashtag.prototype._events = function() {
     this.hashtag.click((function(_this) {
       return function(event) {
-        var container, element, iframe, overlay, skin, wrap;
+        var container, element, iframe, loading, overlay, skin, wrap;
         element = jQuery(event.target);
         iframe = _this._buildIframe(element);
         container = _this._buildContainer();
@@ -48,8 +49,12 @@ Hashtag = (function() {
         overlay = jQuery("<div/>").addClass("hashtag-overlay");
         wrap = jQuery("<div/>").addClass("hashtag-wrap");
         skin = jQuery("<div/>").addClass("hashtag-skin");
-        overlay.append(wrap.append(skin.append(container)));
+        loading = jQuery("<div/>").attr("id", "hashtag-loading").append("<div></div>");
+        overlay.append(wrap.append(skin.append(container))).append(loading);
         jQuery('body').append(overlay);
+        jQuery("#" + _this.frameName).load(function() {
+          return jQuery('#hashtag-loading').hide();
+        });
         if (jQuery.isFunction(_this.options.callback)) {
           return _this.options.callback.apply(_this, [_this]);
         }
@@ -71,10 +76,9 @@ Hashtag = (function() {
   };
 
   Hashtag.prototype._buildIframe = function(element) {
-    var frameName, iframe;
-    frameName = "hashtag-frame-" + this.uid;
+    var iframe;
     iframe = jQuery('<iframe frameborder="0" vspace="0" hspace="0" scrolling="auto" />');
-    iframe.attr("id", frameName).attr("name", frameName).addClass("hashtag-iframe");
+    iframe.attr("id", this.frameName).attr("name", this.frameName).addClass("hashtag-iframe");
     iframe.attr("src", HashtagParser.buildUrl(this.options.iframeUrl + this.uid, {
       key: __ht.api_key
     }));
@@ -210,4 +214,4 @@ jQuery.noConflict();
 
 jQuery(document).ready(function() {
   return __ht.parser = new HashtagParser(__ht.api_key);
-});
+});;

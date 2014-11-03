@@ -94,3 +94,98 @@
   outline: none;
   vertical-align: top;
 }
+
+#hashtag-loading {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin-top: -22px;
+  margin-left: -22px;
+  background-position: 0 -108px;
+  opacity: 0.8;
+  cursor: pointer;
+  z-index: 8060;
+}
+
+#hashtag-loading div {
+  width: 44px;
+  height: 44px;
+}
+
+#hashtag-loading, #hashtag-loading div, #hashtag-loading{
+  background: none!important;
+  background-image: none!important;
+}
+
+
+#hashtag-loading div {
+  position: relative;
+  width: 4em;
+  height: 4em;
+  transform: rotate(165deg);
+  -webkit-transform: rotate(165deg);
+
+}
+#hashtag-loading div:before, #hashtag-loading div:after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: block;
+  width: 0.7em;
+  height: 0.7em;
+  border-radius: 0.35em;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+
+}
+#hashtag-loading div:before {
+  animation: before 2s infinite;
+ -webkit-animation: before 2s infinite;
+
+}
+#hashtag-loading div:after {
+  animation: after 2s infinite;
+  -webkit-animation: after 2s infinite;
+}
+
+@-webkit-keyframes before {
+  0% {
+    width: 0.7em;
+    box-shadow: 1.65em -0.95em rgba(243, 245, 247, 0.75), -1.65em 0.95em rgba(243, 245, 247, 0.75);
+  }
+
+  35% {
+    width: 4em;
+    box-shadow: 0 -0.95em rgba(243, 245, 247, 0.75), 0 0.95em rgba(243, 245, 247, 0.75);
+  }
+
+  70% {
+    width: 0.7em;
+    box-shadow: -1.65em -0.95em rgba(243, 245, 247, 0.75), 1.65em 0.95em rgba(243, 245, 247, 0.75);
+  }
+
+  100% {
+    box-shadow: 1.65em -0.95em rgba(243, 245, 247, 0.75), -1.65em 0.95em rgba(243, 245, 247, 0.75);
+  }
+}
+@-webkit-keyframes after {
+  0% {
+    height: 0.7em;
+    box-shadow: 0.95em 1.65em rgba(243, 245, 247, 0.75), -0.95em -1.65em rgba(243, 245, 247, 0.75);
+  }
+
+  35% {
+    height: 4em;
+    box-shadow: 0.95em 0 rgba(243, 245, 247, 0.75), -0.95em 0 rgba(243, 245, 247, 0.75);
+  }
+
+  70% {
+    height: 0.7em;
+    box-shadow: 0.95em -1.65em rgba(243, 245, 247, 0.75), -0.95em 1.65em rgba(243, 245, 247, 0.75);
+  }
+
+  100% {
+    box-shadow: 0.95em 1.65em rgba(243, 245, 247, 0.75), -0.95em -1.65em rgba(243, 245, 247, 0.75);
+  }
+}

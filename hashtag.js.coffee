@@ -21,6 +21,7 @@ class Hashtag
   _setup: ->
     @hashtag = jQuery(@dom_element)
     @uid = @hashtag.attr("title").replace(/\#/g, "")
+    @frameName = "hashtag-frame-" + @uid
 
     @hashtag.addClass(@options.wrapper)
     @hashtag.data "hashtag", this
@@ -36,10 +37,14 @@ class Hashtag
       overlay = jQuery("<div/>").addClass("hashtag-overlay")
       wrap = jQuery("<div/>").addClass("hashtag-wrap")
       skin = jQuery("<div/>").addClass("hashtag-skin")
+      loading = jQuery("<div/>").attr("id", "hashtag-loading").append("<div></div>")
 
-      overlay.append(wrap.append(skin.append(container)))
+      overlay.append(wrap.append(skin.append(container))).append(loading)
 
       jQuery('body').append(overlay)
+
+      jQuery("#" + @frameName).load ->
+        jQuery('#hashtag-loading').hide()
 
       if jQuery.isFunction(@options.callback)
         @options.callback.apply(this, [this])
@@ -54,10 +59,9 @@ class Hashtag
     jQuery(window).height() - 40
 
   _buildIframe: (element) ->
-    frameName = "hashtag-frame-" + @uid
 
     iframe = jQuery('<iframe frameborder="0" vspace="0" hspace="0" scrolling="auto" />')
-    iframe.attr("id", frameName).attr("name", frameName).addClass("hashtag-iframe")
+    iframe.attr("id", @frameName).attr("name", @frameName).addClass("hashtag-iframe")
     iframe.attr "src", HashtagParser.buildUrl(@options.iframeUrl + @uid,
       key: __ht.api_key
     )
