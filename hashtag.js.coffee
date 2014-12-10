@@ -44,6 +44,7 @@ class Hashtag
       overlay.append(wrap.append(skin.append(container))).append(loading)
 
       jQuery('body').append(overlay)
+      jQuery('body').css("position", "fixed")
 
       jQuery("#" + @frameName).load ->
         jQuery('#hashtag-loading').hide()
@@ -76,7 +77,7 @@ class Hashtag
     container.css("height", this._contentHeight() + "px")
 
 
-    close = jQuery("<a href='javascript:void(0)' onclick='jQuery(\".hashtag-overlay\").remove()'></a>").addClass("hashtag-close")
+    close = jQuery("<a href='javascript:void(0)' onclick='jQuery(\".hashtag-overlay\").remove();jQuery(\"body\").css(\"position\", \"static\")'></a>").addClass("hashtag-close")
     title = jQuery("<div/>").addClass("hashtag-title").text(@hashtag.attr("title"))
 
     container.append(close).append(title)
