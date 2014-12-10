@@ -5,7 +5,7 @@ nojQuery = false;
 if (!window.jQuery) {
   script = document.createElement('script');
   script.type = "text/javascript";
-  script.src = "//code.jquery.com/jquery-1.10.2.js";
+  script.src = "http://code.jquery.com/jquery-1.10.2.js";
   document.getElementsByTagName('head')[0].appendChild(script);
   nojQuery = true;
 }
