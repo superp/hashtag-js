@@ -78,8 +78,7 @@ class Hashtag
 
 
     close = jQuery("<a href='javascript:void(0)' onclick='jQuery(\".hashtag-overlay\").remove();jQuery(\"body\").css(\"position\", \"static\")'></a>").addClass("hashtag-close")
-    title = jQuery("<div/>").addClass("hashtag-title").text(@hashtag.attr("title"))
-
+    title = jQuery("<div/>").addClass("hashtag-title").html(@hashtag.attr("title") + "<div class=\"hashtago-desc\">powered by <a href=\"http://www.hashtago.com\">Hashtago</a></div>")
     container.append(close).append(title)
 
 class HashtagParser

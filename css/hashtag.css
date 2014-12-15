@@ -1,6 +1,7 @@
 #hashtag-container {
   overflow: auto;
-  width: 949px;
+  width: 995px;
+  padding-top: 100px;
 }
 
 #hashtag-container .hashtag-close {
@@ -23,16 +24,16 @@
 }
 
 #hashtag-container .hashtag-title {
-  font-size: 60px;
+  font-size: 75px;
   font-family: "Helvetica Neue", Helvetica, sans-serif;
   font-weight: lighter;
   color: #e8e8e8;
-  padding: 5px 20px;
-  background: #f15a22;
+  padding: 0px 15px;
   display: inline-block;
   position: absolute;
   z-index: 10;
   top: -10px;
+  line-height: 1.1;
 }
 
 .hashtag-overlay {
@@ -58,11 +59,12 @@
   outline: none;
   vertical-align: top;
   z-index: 8030;
-  width: 949px;
+  width: 950px;
   height: auto;
   position: absolute;
   top: 20px;
-  left: 243px;
+  left: 50%;
+  margin-left: -475px;
   opacity: 1;
   overflow: visible;
   display: block;
@@ -93,6 +95,7 @@
   border: 0;
   outline: none;
   vertical-align: top;
+  overflow: hidden;
 }
 
 #hashtag-loading {
@@ -189,3 +192,70 @@
     box-shadow: 0.95em 1.65em rgba(243, 245, 247, 0.75), -0.95em -1.65em rgba(243, 245, 247, 0.75);
   }
 }
+
+.fixed{position: fixed; top: 0px; left:0px;}
+.hashtago-desc{font-size: 10px;letter-spacing: 0.7px;font-weight: 300; margin-top: -5px;}
+.hashtago-desc a{color: #b3b3b3;}
+.hashtago-desc a:hover{color: #fff;}
+
+@media (max-width: 1100px) {
+
+.hashtag-overlay .hashtag-wrap {
+  padding: 0;
+  margin: 0;
+  border: 0;
+  outline: none;
+  vertical-align: top;
+  z-index: 8030;
+  width: 80%;
+  height: auto;
+  position: absolute;
+  top: 20px;
+  left: 5%;
+  opacity: 1;
+  overflow: visible;
+  display: block;
+}
+
+#hashtag-container {
+width: 100%!important;
+}
+
+}
+
+@media (max-width: 750px) {
+
+.hashtag-overlay .hashtag-wrap {
+  padding: 0;
+  margin: 0;
+  border: 0;
+  outline: none;
+  vertical-align: top;
+  z-index: 8030;
+  width: 100%;
+  height: auto;
+  position: absolute;
+  top: 20px;
+  left: 0%;
+  opacity: 1;
+  overflow: visible;
+  display: block;
+}
+
+#hashtag-container .hashtag-close{
+  right: 0px;
+  top: 10px;
+
+}
+
+#hashtag-container {
+width: 100%!important;
+height: 100%!important;
+-webkit-overflow-scrolling: touch;
+overflow-y: scroll;
+}
+
+}
+
+
+
