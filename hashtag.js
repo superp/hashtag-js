@@ -47,8 +47,9 @@ Hashtag = (function() {
         wrap = jQuery("<div/>").addClass("hashtag-wrap");
         skin = jQuery("<div/>").addClass("hashtag-skin");
         loading = jQuery("<div/>").attr("id", "hashtag-loading").append("<div></div>");
-        overlay.append(wrap.append(skin.append(container))).append(loading);
-        jQuery('body').append(overlay);
+        overlay.append(loading);
+        wrap.append(skin.append(container));
+        jQuery('body').append(overlay).append(wrap);
         jQuery('body').css("position", "fixed");
         jQuery("#" + _this.frameName).load(function() {
           return jQuery('#hashtag-loading').hide();
@@ -88,7 +89,7 @@ Hashtag = (function() {
     container = jQuery("<div/>");
     container.attr("id", "hashtag-container");
     container.css("height", this._contentHeight() + "px");
-    close = jQuery("<a href='javascript:void(0)' onclick='jQuery(\".hashtag-overlay\").remove();jQuery(\"body\").css(\"position\", \"static\")'></a>").addClass("hashtag-close");
+    close = jQuery("<a href='javascript:void(0)' onclick='jQuery(\".hashtag-overlay\").remove();jQuery(\".hashtag-wrap\").remove();jQuery(\"body\").css(\"position\", \"static\")'></a>").addClass("hashtag-close");
     title = jQuery("<div/>").addClass("hashtag-title").html(this.hashtag.attr("title") + "<div class=\"hashtago-desc\">powered by <a href=\"http://www.hashtago.com\">Hashtago</a></div>");
     return container.append(close).append(title);
   };
