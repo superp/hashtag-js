@@ -3,7 +3,7 @@ nojQuery = false
 if !window.jQuery
   script = document.createElement('script')
   script.type = "text/javascript"
-  script.src = "http://code.jquery.com/jquery-1.10.2.js"
+  script.src = "//code.jquery.com/jquery-1.10.2.js"
   document.getElementsByTagName('head')[0].appendChild(script)
 
   nojQuery = true
@@ -12,7 +12,7 @@ class Hashtag
   constructor: (@dom_element, options = {}) ->
     defaults =
       wrapper: "ht-wrapper"
-      iframeUrl: "http://www.hashtago.com/widgets/"
+      iframeUrl: "http://hashtago.com/widgets/"
       callback: null
       
     @options = jQuery.extend defaults, options
@@ -87,7 +87,7 @@ class HashtagParser
       wrapper: "body"
       regex: /\[(\#\w+)\]/ig
       hashtagClass: "ht-init"
-      collectionUrl: "http://www.hashtago.com/widgets"
+      collectionUrl: "http://hashtago.com/widgets"
       cssUrl: "css/hashtag.css"
       
     @options = jQuery.extend defaults, options
