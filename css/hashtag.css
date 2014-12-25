@@ -244,8 +244,7 @@ width: 100%!important;
 
 #hashtag-container .hashtag-close{
   right: 0px;
-  top: 10px;
-
+  top: 0;
 }
 
 #hashtag-container {
@@ -255,6 +254,12 @@ height: 100%!important;
 overflow-y: scroll;
 }
 
+.hashtag-wrap {
+  position: absolute;
+  top: 0;
+  z-index: 8500;
+  left: 50%;
+  margin: 0 0 0 -410px;
 }
 
 
