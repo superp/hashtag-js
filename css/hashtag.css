@@ -248,10 +248,14 @@ width: 100%!important;
   }
 
   #hashtag-container {
-  width: 100%!important;
-  height: 100%!important;
-  -webkit-overflow-scrolling: touch;
-  overflow-y: scroll;
+    width: 100%!important;
+    height: 100%!important;
+    -webkit-overflow-scrolling: touch;
+    overflow-y: scroll;
+  }
+
+  .hashtag-wrap {
+    margin: 0 0 0 -150px;
   }
 }
 
