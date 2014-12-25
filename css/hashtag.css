@@ -11,7 +11,7 @@
   height: 56px;
   right: -60px;
   position: absolute;
-  top: -18px;
+  top: 0;
   cursor: pointer;
   z-index: 8040;
 }
@@ -225,33 +225,34 @@ width: 100%!important;
 
 @media (max-width: 750px) {
 
-.hashtag-overlay .hashtag-wrap {
-  padding: 0;
-  margin: 0;
-  border: 0;
-  outline: none;
-  vertical-align: top;
-  z-index: 8030;
-  width: 100%;
-  height: auto;
-  position: absolute;
-  top: 20px;
-  left: 0%;
-  opacity: 1;
-  overflow: visible;
-  display: block;
-}
+  .hashtag-overlay .hashtag-wrap {
+    padding: 0;
+    margin: 0;
+    border: 0;
+    outline: none;
+    vertical-align: top;
+    z-index: 8030;
+    width: 100%;
+    height: auto;
+    position: absolute;
+    top: 20px;
+    left: 0%;
+    opacity: 1;
+    overflow: visible;
+    display: block;
+  }
 
-#hashtag-container .hashtag-close{
-  right: 0px;
-  top: 0;
-}
+  #hashtag-container .hashtag-close{
+    right: 0px;
+    top: 0;
+  }
 
-#hashtag-container {
-width: 100%!important;
-height: 100%!important;
--webkit-overflow-scrolling: touch;
-overflow-y: scroll;
+  #hashtag-container {
+  width: 100%!important;
+  height: 100%!important;
+  -webkit-overflow-scrolling: touch;
+  overflow-y: scroll;
+  }
 }
 
 .hashtag-wrap {
